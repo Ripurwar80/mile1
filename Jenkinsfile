@@ -34,9 +34,8 @@ pipeline {
 
       stage("Build Image") {
           steps {
-              script {
-                  dockerImage = docker.build registry + ":$BUILD_NUMBER"
-              }
+              sh 'docker build -t testing .'
+              sh 'docker tag testing:latest 360433695343.dkr.ecr.ap-south-1.amazonaws.com/testing:latest'
           }
 
           post {
@@ -48,9 +47,7 @@ pipeline {
 
       stage("Deploy Image") {
           steps {
-              script {
-                  docker push $dockerImage
-                  }
+              sh 'docker push 360433695343.dkr.ecr.ap-south-1.amazonaws.com/testing:latest'
               }
           }
 
