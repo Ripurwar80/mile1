@@ -13,5 +13,8 @@ public class sumTest {
     public void test1() {
         sum object = new sum();
         Assert.assertEquals(5, object.add(2,3));
+        Assert.assertEquals(9, object.add(6,3));
+        Assert.assertEquals(11, object.add(7,4));
+        Assert.assertEquals(15, object.add(6,9));
     }
 }
