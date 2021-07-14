@@ -47,6 +47,7 @@ pipeline {
 
       stage("Deploy Image") {
           steps {
+              sh 'docker login -u AWS -p 360433695343.dkr.ecr.ap-south-1.amazonaws.com'
               sh 'docker push 360433695343.dkr.ecr.ap-south-1.amazonaws.com/testing:latest'
               }
 
@@ -63,4 +64,9 @@ pipeline {
           }
       }
   }
+    post {
+        always {
+            cleanws()
+        }
+    }
 }
