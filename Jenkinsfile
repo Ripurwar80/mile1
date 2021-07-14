@@ -2,9 +2,7 @@ pipeline {
     agent any
 
     environment {
-        registryId = "Docker_hub_id"
-        registryUrl = "https://registry.hub.docker.com"
-        imageName = 'arsator/milestone1:1.0'
+        registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
         dockerImage = ''
     }
 
@@ -37,7 +35,7 @@ pipeline {
       stage("Build Image") {
           steps {
               script {
-                  dockerImage = docker.build imageName
+                  dockerImage = docker.build registry + ":$BUILD_NUMBER"
               }
           }
 
@@ -51,8 +49,7 @@ pipeline {
       stage("Deploy Image") {
           steps {
               script {
-                  docker.withRegistry(registryUrl, registryId) {
-                      dockerImage.push()
+                  docker push $dockerImage
                   }
               }
           }
@@ -66,7 +63,7 @@ pipeline {
 
       stage("Remove Image") {
           steps {
-              sh 'docker rmi $imageName'
+              sh 'docker rmi $dockerImage'
           }
       }
   }
