@@ -49,7 +49,6 @@ pipeline {
           steps {
               sh 'docker push 360433695343.dkr.ecr.ap-south-1.amazonaws.com/testing:latest'
               }
-          }
 
           post {
               success {
