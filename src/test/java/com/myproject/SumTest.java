@@ -6,12 +6,12 @@ import main.java.com.myproject.sum;
 
 import org.junit.Assert;
 
-public class sumTest {
+public class SumTest {
 
     //testing getSize
     @Test
     public void test1() {
-        sum object = new sum();
+        Sum object = new Sum();
         Assert.assertEquals(5, object.add(2,3));
         Assert.assertEquals(9, object.add(6,3));
         Assert.assertEquals(11, object.add(7,4));
