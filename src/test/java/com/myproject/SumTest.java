@@ -2,7 +2,7 @@ package test.java.com.myproject;
 
 import org.junit.Test;
 
-import main.java.com.myproject.sum;
+import main.java.com.myproject.Sum;
 
 import org.junit.Assert;
 
