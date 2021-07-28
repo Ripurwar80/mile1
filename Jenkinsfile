@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     tools { 
-        maven 'Maven 3.8.1' 
+        maven "maven" 
     }
 //     environment {
 //         registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
