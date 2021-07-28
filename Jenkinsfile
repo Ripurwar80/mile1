@@ -33,6 +33,7 @@ pipeline {
 
       stage("Build Image") {
           steps {
+              sh 'systemctl start docker'
               sh 'docker build -t rishabh .'
               sh 'docker tag rishabh:latest public.ecr.aws/m3s0p1q4/rishabh:latest'
           }
