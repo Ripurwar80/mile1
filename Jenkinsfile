@@ -2,12 +2,12 @@ pipeline {
     agent any
     
     tools { 
-        Maven 'maven 3.8.1' 
+        maven 'Maven 3.8.1' 
     }
-    environment {
-        registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
-        dockerImage = ''
-    }
+//     environment {
+//         registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
+//         dockerImage = ''
+//     }
 
      stages {
       stage("Git Checkout") {
