@@ -32,6 +32,16 @@ pipeline {
               sh 'docker tag rishabh:latest public.ecr.aws/m3s0p1q4/rishabh:latest'
           }
       }
+         stage("Terraform init"){
+             steps{
+                 sh 'terraform init'
+             }
+         }
+         stage("Terraform apply"){
+             steps{
+                 sh 'terraform apply --auto-approve'
+             }
+         }
 
 //       stage("Deploy Image") {
 //           steps {
