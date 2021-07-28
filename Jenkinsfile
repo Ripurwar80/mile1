@@ -3,6 +3,7 @@ pipeline {
     
     tools { 
         maven "maven" 
+        jdk "java"
     }
 //     environment {
 //         registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
