@@ -35,11 +35,7 @@ pipeline {
 
       stage("Build Image") {
           steps {
-              //sh 'systemctl start docker'
-              sh 'service docker start'
-              sh 'chown `id -u` /var/run/docker.sock'
               sh 'docker build -t rishabh .'
-              sh 'docker tag rishabh:latest public.ecr.aws/m3s0p1q4/rishabh:latest'
           }
       }
          stage("Terraform init"){
