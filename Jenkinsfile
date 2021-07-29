@@ -1,5 +1,5 @@
 pipeline {
-    agent { "ec2-general-worker-node"}
+    agent docker
     
     tools { 
         maven "maven" 
