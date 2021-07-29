@@ -1,14 +1,14 @@
 pipeline {
-//     agent {
-//         label 'ec2-general-worker-node'
-//     }
-    agent any
-//     tools { 
-//         maven "maven" 
-//         jdk "java"
-//         dockerTool "myDocker"
-//         terraform "terraform"
-//     }
+    agent {
+        label 'ec2-general-worker-node'
+    }
+//     agent any
+    tools { 
+        maven "maven" 
+        jdk "java"
+        dockerTool "myDocker"
+        terraform "terraform"
+    }
 //     environment {
 //         registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
 //         dockerImage = ''
@@ -34,11 +34,11 @@ pipeline {
           }
       }
 
-      stage("Build Image") {
-          steps {
-              sh 'docker build -t rishabh .'
-          }
-      }
+//       stage("Build Image") {
+//           steps {
+//               sh 'docker build -t rishabh .'
+//           }
+//       }
          stage("Terraform init"){
              steps{
                  sh 'terraform init'
