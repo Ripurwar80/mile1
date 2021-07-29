@@ -34,11 +34,11 @@ pipeline {
           }
       }
 
-//       stage("Build Image") {
-//           steps {
-//               sh 'docker build -t rishabh .'
-//           }
-//       }
+      stage("Build Image") {
+          steps {
+              sh 'docker build -t rishabh .'
+          }
+      }
          stage("Terraform init"){
              steps{
                  sh 'terraform init'
