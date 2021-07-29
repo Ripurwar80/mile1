@@ -43,11 +43,11 @@ pipeline {
              steps{
                  withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployemt"]])
                  {
-                 sh '"
+                 sh '''
                      cd terraform-code
                      terraform init
                      terrafrom apply
-                     "'
+                     '''
                  }
              }
          }
