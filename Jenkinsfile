@@ -41,7 +41,14 @@ pipeline {
 //       }
          stage("Terraform init"){
              steps{
-                 sh 'terraform init'
+                 withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployemt"]])
+                 {
+                 sh '"
+                     cd terraform-code
+                     terraform init
+                     terrafrom apply
+                     "'
+                 }
              }
          }
          stage("Terraform apply"){
