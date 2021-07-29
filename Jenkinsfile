@@ -7,7 +7,7 @@ pipeline {
         maven "maven" 
         jdk "java"
         dockerTool "myDocker"
-        terraform "terraform"
+        terraform "terraform1"
     }
 //     environment {
 //         registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
