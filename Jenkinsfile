@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { "ec2-general-worker-node"}
     
     tools { 
         maven "maven" 
