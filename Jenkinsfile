@@ -3,12 +3,12 @@ pipeline {
         label 'ec2-general-worker-node'
     }
     
-    tools { 
-        maven "maven" 
-        jdk "java"
-        dockerTool "myDocker"
-        terraform "terraform"
-    }
+//     tools { 
+//         maven "maven" 
+//         jdk "java"
+//         dockerTool "myDocker"
+//         terraform "terraform"
+//     }
 //     environment {
 //         registry = "360433695343.dkr.ecr.ap-south-1.amazonaws.com"
 //         dockerImage = ''
