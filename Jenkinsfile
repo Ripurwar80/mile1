@@ -51,7 +51,7 @@ pipeline {
                  terraform plan -destroy
                
                  terraform apply --auto-approve
-                 terraform destroy
+                 terraform destroy --auto-approve
                   '''
                  }
              }
