@@ -17,7 +17,7 @@ variable "az_count" {
 
 variable "app_image" {
   description = "Docker image to run in the ECS cluster"
-  default     = "rishabh" #has to pass
+  default     = "public.ecs.aws/rishabh:latest" #has to pass
 }
 
 variable "app_port" {
