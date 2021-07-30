@@ -46,16 +46,16 @@ pipeline {
                  sh '''
                      cd terraform-code
                      terraform init
-                     terrafrom apply
+                     terrafrom apply --auto-approve
                      '''
                  }
              }
          }
-         stage("Terraform apply"){
-             steps{
-                 sh 'terraform apply --auto-approve'
-             }
-         }
+//         stage("Terraform apply"){
+//             steps{
+//                 sh 'terraform apply --auto-approve'
+//             }
+//         }
 
 //       stage("Deploy Image") {
 //           steps {
