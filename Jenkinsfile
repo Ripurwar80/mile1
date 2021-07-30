@@ -45,7 +45,7 @@ pipeline {
                  {
                  sh '''
                      terraform init
-                     terrafrom apply --auto-approve
+                     terraform apply --auto-approve
                      '''
                  }
              }
@@ -77,3 +77,4 @@ pipeline {
         }
     }
 }
+r
