@@ -1,7 +1,7 @@
 pipeline {
     agent 
     {
-        any
+        //any
         label 'ec2-general-worker-node'
     }
     tools { 
