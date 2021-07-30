@@ -46,11 +46,14 @@ pipeline {
              steps{
                  withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployment"]])
                  {
-                 sh '''
+                 sh 
+                  '''
                  terraform init
                  terraform plan
-                     terraform apply --auto-approve
-                     '''
+                 terraform apply -destroy --auto-approve
+                 terraform apply --auto-approve
+                 terraform apply -destroy --auto-approve
+                  '''
                  }
              }
          }
