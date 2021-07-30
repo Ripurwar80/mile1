@@ -65,11 +65,11 @@ pipeline {
 //               }
 //       }
 
-      stage("Remove Image") {
-          steps {
-              sh 'docker rmi testing'
-          }
-      }
+//      stage("Remove Image") {
+//          steps {
+//              sh 'docker rmi testing'
+//          }
+//      }
   }
     post {
         always {
