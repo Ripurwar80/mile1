@@ -39,7 +39,7 @@ pipeline {
            steps {
                //sh 'systemctl start docker'
                sh 'docker build -t rishabh .'
-               sh 'docker tag rishabh:latest public.ecr.aws/m3s0p1q4/rishabh:latest'
+               sh 'docker tag rishabh:latest public.ecs.aws/m3s0p1q4/rishabh:latest'
            }
        }
          stage("Terraform Start"){
