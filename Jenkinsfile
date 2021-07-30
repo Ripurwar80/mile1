@@ -47,7 +47,6 @@ pipeline {
                  withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployment"]])
                  {
                  sh '''
-                     terraform init
                      terraform destroy --auto-approve
                      '''
                  }
