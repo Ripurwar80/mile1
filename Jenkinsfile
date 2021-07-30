@@ -48,7 +48,7 @@ pipeline {
                  {
                  sh '''
                  terraform init
-                 terraform plan - destroy
+                 terraform plan -destroy
                  terraform apply --auto-approve
                  terraform destroy
                   '''
