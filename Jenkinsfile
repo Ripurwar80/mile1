@@ -40,16 +40,29 @@ pipeline {
               sh 'docker tag rishabh:latest public.ecs.aws/rishabh:latest'
           }
       }
-         stage("Terraform init"){
+         stage("Terraform Start"){
              steps{
-                 sh 'terraform init'
+                 withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployment"]])
+                 {
+                 sh '''
+                 terraform init
+                 terraform plan -out
+                 terraform apply --auto-approve
+                 terraform destroy --auto-approve
+                  '''
+                 }
              }
          }
-         stage("Terraform apply"){
-             steps{
-                 sh 'terraform apply --auto-approve'
-             }
-         }
+//          stage("Terraform init"){
+//              steps{
+//                  sh 'terraform init'
+//              }
+//          }
+//          stage("Terraform apply"){
+//              steps{
+//                  sh 'terraform apply --auto-approve'
+//              }
+//          }
 
 //       stage("Deploy Image") {
 //           steps {
@@ -59,12 +72,6 @@ pipeline {
 //               }
 //       }
 
-      stage("Remove Image") {
-          steps {
-              sh 'docker rmi testing'
-          }
-      }
-  }
     post {
         always {
             junit 'target/surefire-reports/*.xml'
