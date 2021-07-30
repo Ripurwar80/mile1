@@ -20,26 +20,26 @@ pipeline {
       }
 
 
-//       stage("Build") {
-//           steps {
-//               sh 'mvn -B -DskipTests clean package'
-//           }
-//       }
+       stage("Build") {
+           steps {
+               sh 'mvn -B -DskipTests clean package'
+           }
+       }
 
-//       stage("Unit Test") {
-//           steps {
-//               sh 'mvn test'
-//           }
-//       }
+       stage("Unit Test") {
+           steps {
+               sh 'mvn test'
+           }
+       }
 
-//       stage("Build Image") {
-//           steps {
-//               //sh 'systemctl start docker'
-//               sh 'docker build -t rishabh .'
-//               sh 'docker tag rishabh:latest public.ecr.aws/m3s0p1q4/rishabh:latest'
-//           }
-//       }
-         stage("Terraform init"){
+       stage("Build Image") {
+           steps {
+               //sh 'systemctl start docker'
+               sh 'docker build -t rishabh .'
+               sh 'docker tag rishabh:latest public.ecr.aws/m3s0p1q4/rishabh:latest'
+           }
+       }
+         stage("Terraform Start"){
              steps{
                  withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployment"]])
                  {
