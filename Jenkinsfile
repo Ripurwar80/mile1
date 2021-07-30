@@ -44,7 +44,6 @@ pipeline {
                  withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployment"]])
                  {
                  sh '''
-                     cd terraform-code
                      terraform init
                      terrafrom apply --auto-approve
                      '''
