@@ -1,123 +1,69 @@
 # network.tf
-resource "aws_vpc" "app-vpc" {
-  cidr_block = "10.0.0.0/16"
+
+# Fetch AZs in the current region
+data "aws_availability_zones" "available" {
 }
 
-resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.app-vpc.id
-  cidr_block = "10.0.1.0/24"
+resource "aws_vpc" "main" {
+  cidr_block = "172.17.0.0/16"
 }
 
+# Create var.az_count private subnets, each in a different AZ
 resource "aws_subnet" "private" {
-  vpc_id     = aws_vpc.app-vpc.id
-  cidr_block = "10.0.2.0/24"
+  count             = var.az_count
+  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  vpc_id            = aws_vpc.main.id
 }
 
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.app-vpc.id
+# Create var.az_count public subnets, each in a different AZ
+resource "aws_subnet" "public" {
+  count                   = var.az_count
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, var.az_count + count.index)
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  vpc_id                  = aws_vpc.main.id
+  map_public_ip_on_launch = true
 }
 
+# Internet Gateway for the public subnet
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+}
+
+# Route the public subnet traffic through the IGW
+resource "aws_route" "internet_access" {
+  route_table_id         = aws_vpc.main.main_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.gw.id
+}
+
+# Create a NAT gateway with an Elastic IP for each private subnet to get internet connectivity
+resource "aws_eip" "gw" {
+  count      = var.az_count
+  vpc        = true
+  depends_on = [aws_internet_gateway.gw]
+}
+
+resource "aws_nat_gateway" "gw" {
+  count         = var.az_count
+  subnet_id     = element(aws_subnet.public.*.id, count.index)
+  allocation_id = element(aws_eip.gw.*.id, count.index)
+}
+
+# Create a new route table for the private subnets, make it route non-local traffic through the NAT gateway to the internet
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.app-vpc.id
-}
+  count  = var.az_count
+  vpc_id = aws_vpc.main.id
 
-resource "aws_route_table_association" "public_subnet" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "private_subnet" {
-  subnet_id      = aws_subnet.private.id
-  route_table_id = aws_route_table.private.id
-}
-
-resource "aws_eip" "nat" {
-  vpc = true
-}
-
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.app-vpc.id
-}
-
-resource "aws_nat_gateway" "ngw" {
-  subnet_id     = aws_subnet.public.id
-  allocation_id = aws_eip.nat.id
-
-  depends_on = [aws_internet_gateway.igw]
-}
-
-resource "aws_route" "public_igw" {
-  route_table_id         = aws_route_table.public.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.igw.id
-}
-
-resource "aws_route" "private_ngw" {
-  route_table_id         = aws_route_table.private.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.ngw.id
-}
-
-resource "aws_security_group" "http" {
-  name        = "http"
-  description = "HTTP traffic"
-  vpc_id      = aws_vpc.app-vpc.id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = element(aws_nat_gateway.gw.*.id, count.index)
   }
 }
 
-resource "aws_security_group" "https" {
-  name        = "https"
-  description = "HTTPS traffic"
-  vpc_id      = aws_vpc.app-vpc.id
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group" "egress-all" {
-  name        = "egress_all"
-  description = "Allow all outbound traffic"
-  vpc_id      = aws_vpc.app-vpc.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group" "api-ingress" {
-  name        = "api_ingress"
-  description = "Allow ingress to API"
-  vpc_id      = aws_vpc.app-vpc.id
-
-  ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-output "vpc_id" {
-  value = aws_vpc.app-vpc.id
-}
-
-output "public_subnet_id" {
-  value = aws_subnet.public.id
-}
-
-output "private_subnet_id" {
-  value = aws_subnet.private.id
+# Explicitly associate the newly created route tables to the private subnets (so they don't default to the main route table)
+resource "aws_route_table_association" "private" {
+  count          = var.az_count
+  subnet_id      = element(aws_subnet.private.*.id, count.index)
+  route_table_id = element(aws_route_table.private.*.id, count.index)
 }
