@@ -1,6 +1,7 @@
 pipeline {
     agent 
     {
+        //pro
         //any
         label 'ec2-general-worker-node'
     }
