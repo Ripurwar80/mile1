@@ -37,6 +37,7 @@ pipeline {
       stage("Build Image") {
           steps {
               sh 'docker build -t rishabh .'
+              sh 'docker tag rishabh:latest public.ecs.aws/rishabh:latest'
           }
       }
          stage("Terraform init"){
