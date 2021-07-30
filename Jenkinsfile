@@ -1,6 +1,9 @@
 pipeline {
-    agent any
-    
+    agent 
+    {
+        any
+        label 'ec2-general-worker-node'
+    }
     tools { 
         maven "maven" 
         jdk "java"
