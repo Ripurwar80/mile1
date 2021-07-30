@@ -50,7 +50,8 @@ pipeline {
                  terraform init
                  terraform plan -destroy
                
-                 terraform destroy --auto-approve
+                 terraform apply --auto-approve
+                 terraform destroy
                   '''
                  }
              }
