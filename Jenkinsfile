@@ -1,7 +1,7 @@
 pipeline {
     agent 
     {
-        //
+        
         //any
         label 'ec2-general-worker-node'
     }
@@ -19,7 +19,9 @@ pipeline {
      stages {
       stage("Git Checkout") {
           steps {
+              // credentialsId 'aws'
               git 'https://github.com/JasjitSinghRudra/mile1.git'
+              
           }
       }
 
@@ -82,4 +84,3 @@ pipeline {
         }
     }
 }
-r
